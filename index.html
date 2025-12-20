@@ -306,6 +306,11 @@
       <div class="foot">
         註：加班倍率與每一天小時數先照你手稿（平日 2h、假日 8h/12h 分段倍率）做第一版。若你公司規則不同，我們下一步就把倍率/小時改成可調。
       </div>
+      <div style="margin-top:16px; text-align:center;">
+  <button id="resetBtn" class="btn">
+    🔄 一鍵清空重新計算
+  </button>
+      </div>
     </div>
   </div>
 
@@ -389,7 +394,35 @@ const K = (G * 2.8);                           // 2.67 倍時數
     $("calcBtn").addEventListener("click", calc);
 
     // 初始計算
-    calc();
+    $("calcBtn").addEventListener("click", calc);
+
+// 🔽🔽🔽 就「貼在這裡」 🔽🔽🔽
+
+// 一鍵清空重新計算
+$("resetBtn")?.addEventListener("click", () => {
+  // 清空所有數字輸入
+  document.querySelectorAll('input[type="number"]').forEach(inp => {
+    inp.value = 0;
+  });
+
+  // 勾選預設 checkbox（如果有）
+  const includeA = document.querySelector('input[type="checkbox"]');
+  if (includeA) includeA.checked = true;
+
+  // 清空顯示結果（安全寫法）
+  ["D","F","H","M","P","addTotal","dedTotal","T"].forEach(id => {
+    const el = $(id);
+    if (el) el.textContent = "";
+  });
+
+  // 重新計算一次
+  calc();
+});
+
+// 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
+
+// 初始化計算
+calc();
   </script>
 </body>
 </html>
