@@ -52,17 +52,34 @@
       font-size:15px; font-weight:700; margin:2px 0 12px;
     }
     .bar{width:3px; height:16px; background: var(--brand); border-radius:99px}
+}
     .row{
-      display:grid;
-      grid-template-columns: 1fr 150px;
-      gap:10px;
-      align-items:center;
-      padding:10px 0;
-      border-top:1px solid var(--line);
+  display:grid;
+  grid-template-columns: 1fr 150px;
+  gap:10px;
+  align-items:center;
+  padding:10px 0;
+  border-top:1px solid var(--line);
+}
+
+/* 手機窄螢幕：改成上下排，避免擠爆 */
+@media (max-width: 420px){
+  .row{
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .pill{
+    justify-self: start;
+  }
+}
+    .hint{
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
     }
-    .row:first-of-type{border-top:0}
-    .label{font-size:14px;}
-    .hint{color:var(--muted); font-size:12px; margin-top:2px}
     input[type="number"]{
       width:100%;
       padding:10px 12px;
