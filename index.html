@@ -378,9 +378,12 @@ const K = (G * 2.8);                           // 2.67 倍時數
       $("F").textContent = signFmt(F);
       $("H").textContent = signFmt(H);
 
-      $("I").textContent = fmt(I);
-      $("J").textContent = fmt(J);
-      $("K").textContent = fmt(K);
+      const cut2 = n => Math.floor(n * 100) / 100;
+
+     $("I").textContent = cut2(I).toFixed(2);
+     $("J").textContent = cut2(J).toFixed(2);
+     $("K").textContent = cut2(K).toFixed(2);
+
 
       $("M").textContent = "-" + fmt(M);
       $("P").textContent = "-" + fmt(P);
