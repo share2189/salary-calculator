@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>公司薪資計算器</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --muted:#97a3b8;
+      --text:#e9eefc;
+      --line:rgba(255,255,255,.10);
+      --good:#19c37d;
+      --bad:#ff4d4f;
+      --brand:#4da3ff;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Noto Sans TC", "PingFang TC", sans-serif;
+      background: radial-gradient(900px 600px at 20% 0%, rgba(77,163,255,.16), transparent 60%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(25,195,125,.14), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:520px; margin:0 auto; padding:18px 14px 28px}
+    .topbar{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 6px 14px;
+    }
+    .icon{
+      width:36px; height:36px; border-radius:10px;
+      background: linear-gradient(135deg, rgba(77,163,255,.95), rgba(25,195,125,.85));
+      box-shadow: var(--shadow);
+    }
+    h1{font-size:22px; margin:0}
+    .sub{margin:6px 0 0; color:var(--muted); font-size:13px}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:14px;
+      margin:12px 0;
+      backdrop-filter: blur(8px);
+    }
+    .sec-title{
+      display:flex; align-items:center; gap:10px;
+      font-size:15px; font-weight:700; margin:2px 0 12px;
+    }
+    .bar{width:3px; height:16px; background: var(--brand); border-radius:99px}
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 150px;
+      gap:10px;
+      align-items:center;
+      padding:10px 0;
+      border-top:1px solid var(--line);
+    }
+    .row:first-of-type{border-top:0}
+    .label{font-size:14px}
+    .hint{color:var(--muted); font-size:12px; margin-top:2px}
+    input[type="number"]{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      outline:none;
+      font-size:15px;
+    }
+    input[disabled]{
+      opacity:.9;
+      background: rgba(0,0,0,.14);
+    }
+    .pill{
+      display:inline-flex; gap:6px; align-items:baseline;
+      justify-content:flex-end;
+      font-variant-numeric: tabular-nums;
+    }
+    .money{font-size:15px; font-weight:800}
+    .pos{color:var(--good)}
+    .neg{color:var(--bad)}
+    .unit{color:var(--muted); font-size:12px; font-weight:600}
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .mini{
+      padding:12px;
+      border-radius:14px;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .mini .k{color:var(--muted); font-size:12px}
+    .mini .v{font-size:18px; font-weight:900; margin-top:4px}
+    .btn{
+      width:100%;
+      margin-top:12px;
+      padding:14px 14px;
+      border:0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(77,163,255,.95), rgba(25,195,125,.88));
+      color:#04101f;
+      font-weight:900;
+      font-size:16px;
+      box-shadow: var(--shadow);
+    }
+    .toggle{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      padding:10px 0;
+      border-top:1px solid var(--line);
+    }
+    .toggle label{font-size:14px}
+    .toggle input{transform: scale(1.1)}
+    details{margin-top:10px}
+    summary{cursor:pointer; color:var(--muted); font-size:13px}
+    .foot{color:var(--muted); font-size:12px; margin-top:12px; line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="icon"></div>
+      <div>
+        <h1>公司薪資計算器</h1>
+        <div class="sub">手機版｜依你的手稿規則計算（可再調整）</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="bar"></span>基本資料</div>
+
+      <div class="row">
+        <div>
+          <div class="label">底薪（A）</div>
+          <div class="hint">輸入月薪</div>
+        </div>
+        <input id="A" type="number" inputmode="numeric" min="0" value="36000"/>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="label">時薪（B）</div>
+          <div class="hint">B = A ÷ 240（自動）</div>
+        </div>
+        <input id="B" type="number" disabled />
+      </div>
+
+      <div class="toggle">
+        <label>結算是否包含底薪 A</label>
+        <input id="includeBase" type="checkbox" checked />
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="bar"></span>加班</div>
+
+      <div class="row">
+        <div>
+          <div class="label">平日加班天數（C）</div>
+          <div class="hint">每一天按「2 小時 × 1.33 倍」</div>
+        </div>
+        <input id="C" type="number" inputmode="numeric" min="0" value="0"/>
+      </div>
+      <div class="row">
+        <div class="label">平日加班金額（D）</div>
+        <div class="pill"><span id="D" class="money pos">+0</span><span class="unit">元</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="label">假日加班 8H 天數（E）</div>
+          <div class="hint">2H×1.33 + 6H×1.67</div>
+        </div>
+        <input id="E" type="number" inputmode="numeric" min="0" value="0"/>
+      </div>
+      <div class="row">
+        <div class="label">假日加班金額（F）</div>
+        <div class="pill"><span id="F" class="money pos">+0</span><span class="unit">元</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="label">假日加班 12H 天數（G）</div>
+          <div class="hint">2H×1.33 + 6H×1.67 + 4H×2.67</div>
+        </div>
+        <input id="G" type="number" inputmode="numeric" min="0" value="0"/>
+      </div>
+      <div class="row">
+        <div class="label">假日加班金額（H）</div>
+        <div class="pill"><span id="H" class="money pos">+0</span><span class="unit">元</span></div>
+      </div>
+
+      <details>
+        <summary>查看加班時數明細（I / J / K）</summary>
+        <div class="split">
+          <div class="mini">
+            <div class="k">1.33 倍時數（I）</div>
+            <div id="I" class="v">0</div>
+          </div>
+          <div class="mini">
+            <div class="k">1.67 倍時數（J）</div>
+            <div id="J" class="v">0</div>
+          </div>
+          <div class="mini">
+            <div class="k">2.67 倍時數（K）</div>
+            <div id="K" class="v">0</div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="bar"></span>請假</div>
+
+      <div class="row">
+        <div>
+          <div class="label">請假全薪天數（L）</div>
+          <div class="hint">扣款 M = B × 8 × L</div>
+        </div>
+        <input id="L" type="number" inputmode="numeric" min="0" value="0"/>
+      </div>
+      <div class="row">
+        <div class="label">扣款（M）</div>
+        <div class="pill"><span id="M" class="money neg">-0</span><span class="unit">元</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="label">請假半薪天數（O）</div>
+          <div class="hint">扣款 P = B × 4 × O</div>
+        </div>
+        <input id="O" type="number" inputmode="numeric" min="0" value="0"/>
+      </div>
+      <div class="row">
+        <div class="label">扣款（P）</div>
+        <div class="pill"><span id="P" class="money neg">-0</span><span class="unit">元</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="bar"></span>其他</div>
+
+      <div class="row">
+        <div>
+          <div class="label">其他加項（Q）</div>
+          <div class="hint">例如：津貼、獎金</div>
+        </div>
+        <input id="Q" type="number" inputmode="numeric" value="0"/>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="label">其他扣項（R）</div>
+          <div class="hint">例如：代扣、罰款</div>
+        </div>
+        <input id="R" type="number" inputmode="numeric" value="0"/>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="bar"></span>結算結果</div>
+
+      <div class="split">
+        <div class="mini">
+          <div class="k">加項合計</div>
+          <div id="addTotal" class="v pos">+0</div>
+        </div>
+        <div class="mini">
+          <div class="k">扣項合計</div>
+          <div id="dedTotal" class="v neg">-0</div>
+        </div>
+      </div>
+
+      <div class="mini" style="margin-top:10px">
+        <div class="k">實領薪資（T）</div>
+        <div id="T" class="v">0</div>
+      </div>
+
+      <button class="btn" id="calcBtn">計算薪資</button>
+
+      <div class="foot">
+        註：加班倍率與每一天小時數先照你手稿（平日 2h、假日 8h/12h 分段倍率）做第一版。若你公司規則不同，我們下一步就把倍率/小時改成可調。
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const toNum = (v) => Number(v || 0);
+
+    function fmt(n){
+      const x = Math.round(n);
+      return x.toLocaleString("zh-Hant");
+    }
+    function signFmt(n){
+      const x = Math.round(n);
+      const s = x >= 0 ? "+" : "-";
+      return s + fmt(Math.abs(x));
+    }
+
+    function calc(){
+      const A = toNum($("A").value);
+      const B = A / 240;
+
+      const C = toNum($("C").value);
+      const E = toNum($("E").value);
+      const G = toNum($("G").value);
+
+      const L = toNum($("L").value);
+      const O = toNum($("O").value);
+
+      const Q = toNum($("Q").value);
+      const R = toNum($("R").value);
+
+      // 加班金額（依你的手稿第一版）
+      const D = B * 1.33 * 2 * C;                               // 平日：2h@1.33
+      const F = B * (1.33 * 2 + 1.67 * 6) * E;                  // 假日8h
+      const H = B * (1.33 * 2 + 1.67 * 6 + 2.67 * 4) * G;       // 假日12h
+
+      // 加班時數明細（I/J/K）
+      const I = (C * 2) + (E * 2) + (G * 2);
+      const J = (E * 6) + (G * 6);
+      const K = (G * 4);
+
+      // 請假扣款
+      const M = B * 8 * L;
+      const P = B * 4 * O;
+
+      // 合計
+      const addTotal = D + F + H + Q;
+      const dedTotal = M + P + R;
+
+      const includeBase = $("includeBase").checked;
+      const T = (includeBase ? A : 0) + addTotal - dedTotal;
+
+      $("B").value = (Math.round(B * 100) / 100).toFixed(2);
+
+      $("D").textContent = signFmt(D);
+      $("F").textContent = signFmt(F);
+      $("H").textContent = signFmt(H);
+
+      $("I").textContent = fmt(I);
+      $("J").textContent = fmt(J);
+      $("K").textContent = fmt(K);
+
+      $("M").textContent = "-" + fmt(M);
+      $("P").textContent = "-" + fmt(P);
+
+      $("addTotal").textContent = signFmt(addTotal);
+      $("dedTotal").textContent = "-" + fmt(dedTotal);
+      $("T").textContent = fmt(T);
+    }
+
+    // 即時更新
+    ["A","C","E","G","L","O","Q","R","includeBase"].forEach(id=>{
+      $(id).addEventListener("input", calc);
+      $(id).addEventListener("change", calc);
+    });
+    $("calcBtn").addEventListener("click", calc);
+
+    // 初始計算
+    calc();
+  </script>
+</body>
+</html>
