@@ -308,7 +308,11 @@
       </div>
       <div style="margin-top:16px; text-align:center;">
   <button id="resetBtn" class="btn">
-    🔄 一鍵清空重新計算
+     一鍵清空重新計算
+  </button>
+        
+  <button id="shareBtn" class="btn">
+    分享本次計算結果
   </button>
       </div>
     </div>
@@ -418,7 +422,34 @@ $("resetBtn")?.addEventListener("click", () => {
   // 重新計算一次
   calc();
 });
+// 分享 / 截圖功能
+const shareBtn = $("shareBtn");
+if (shareBtn) {
+  shareBtn.addEventListener("click", async () => {
+   
+const now = new Date();
+const ym = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月`;
 
+const text =
+`薪資計算結果（${ym}）
+────────────
+加班收入：${$("addTotal")?.textContent || ""}
+請假扣款：${$("dedTotal")?.textContent || ""}
+本月總薪資：${$("T")?.textContent || ""}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "薪資計算結果",
+          text
+        });
+      } catch (e) {}
+    } else {
+      navigator.clipboard.writeText(text);
+      alert("已複製結果，可貼到 LINE / 訊息");
+    }
+  });
+    }
 // 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
 
 // 初始化計算
