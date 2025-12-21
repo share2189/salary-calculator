@@ -149,8 +149,8 @@
     <div class="topbar">
       <div class="icon"></div>
       <div>
-        <h1>公司薪資計算器</h1>
-        <div class="sub">手機版｜依你的手稿規則計算（可再調整）</div>
+        <h1>薪資計算器</h1>
+        <div class="sub">手機版｜測試版</div>
       </div>
     </div>
 
@@ -316,6 +316,28 @@
   <button id="shareBtn" class="btn">
     分享本次計算結果
   </button>
+        <!-- 勉勵金計算 -->
+<div class="card motivate-card">
+  <h3>勉勵金計算</h3>
+
+  <label>每月天數 (V)</label>
+  <input type="number" id="motivateV" value="0">
+
+  <label>公司排班天數 (W)</label>
+  <input type="number" id="motivateW" value="0">
+
+  <label>請假扣除額 (N)</label>
+  <input type="number" id="motivateN" value="0">
+
+  <label>平日加班天數 (U)</label>
+  <input type="number" id="motivateU" value="0">
+
+  <div class="result">
+    勉勵金結餘 (S)：<span id="motivateS">0</span>
+  </div>
+
+  <button onclick="calcMotivate()">計算勉勵金</button>
+</div>
       </div>
     </div>
   </div>
@@ -455,6 +477,17 @@ const text =
     }
   });
     }
+    function calcMotivate(){
+  const V = toNum($("motivateV").value);
+  const W = toNum($("motivateW").value);
+  const N = toNum($("motivateN").value);
+  const U = toNum($("motivateU").value);
+
+  const base = 5000;
+  const S = (V - W) * base - N + (U * base);
+
+  $("motivateS").textContent = fmt(S);
+  }
 // 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
 
 // 初始化計算
