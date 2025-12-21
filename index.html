@@ -319,6 +319,8 @@
         <!-- 勉勵金計算 -->
 <div class="card motivate-card">
   <h3>勉勵金計算</h3>
+  <label>勉勵金基準額</label>
+<input id="motivateBase" type="number" value="5000">
 
   <label>每月天數 (V)</label>
   <input type="number" id="motivateV" value="0">
@@ -478,15 +480,22 @@ const text =
   });
     }
     function calcMotivate(){
-  const V = toNum($("motivateV").value);
-  const W = toNum($("motivateW").value);
-  const N = toNum($("motivateN").value);
-  const U = toNum($("motivateU").value);
+  const V = toNum($("motivateV").value); // 每月天數
+  const W = toNum($("motivateW").value); // 公司排休天數
+  const N = toNum($("motivateN").value); // 請假扣額
+  const U = toNum($("motivateU").value); // 平日加班天數
+  const base = toNum($("motivateBase").value);
+  
+  let S = 0;
+  const days = V - W;
 
-  const base = 5000;
-  const S = (V - W) * base - N + (U * base);
+  if (days > 0) {
+    const perDay = (base - N) / days;
+    S = perDay * U;
+  }
 
   $("motivateS").textContent = fmt(S);
+}
   }
 // 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
 
