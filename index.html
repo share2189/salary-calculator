@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <link rel="icon" href="./images-icon.png">
-  <link rel="apple-touch-icon" href="./images-icon.png">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>我要錢錢</title>
+
+  <link rel="icon" href="./images-icon.png">
+  <link rel="apple-touch-icon" href="./images-icon.png">
+
   <style>
     :root{
       --bg:#0b1220;
@@ -29,10 +31,7 @@
       color:var(--text);
     }
     .wrap{max-width:520px; margin:0 auto; padding:18px 14px 28px}
-    .topbar{
-      display:flex; align-items:center; gap:10px;
-      padding:10px 6px 14px;
-    }
+    .topbar{display:flex; align-items:center; gap:10px; padding:10px 6px 14px;}
     .icon{
       width:36px; height:36px; border-radius:10px;
       background: linear-gradient(135deg, rgba(77,163,255,.95), rgba(25,195,125,.85));
@@ -40,6 +39,7 @@
     }
     h1{font-size:22px; margin:0}
     .sub{margin:6px 0 0; color:var(--muted); font-size:13px}
+
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid var(--line);
@@ -54,33 +54,27 @@
       font-size:15px; font-weight:700; margin:2px 0 12px;
     }
     .bar{width:3px; height:16px; background: var(--brand); border-radius:99px}
-}
-    .row{
-  display:grid;
-  grid-template-columns: 1fr 150px;
-  gap:10px;
-  align-items:center;
-  padding:10px 0;
-  border-top:1px solid var(--line);
-}
 
-/* 手機窄螢幕：改成上下排，避免擠爆 */
-@media (max-width: 420px){
-.row{
-    grid-template-columns: 1fr;
-    align-items: start;
-  }
-  .pill{
-    justify-self: start;
-  }
-}
-  .hint{
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 2px;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 150px;
+      gap:10px;
+      align-items:center;
+      padding:10px 0;
+      border-top:1px solid var(--line);
+    }
+    @media (max-width: 420px){
+      .row{grid-template-columns: 1fr; align-items: start;}
+      .pill{justify-self: start;}
+    }
+    .label{font-weight:700}
+    .hint{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     input[type="number"]{
       width:100%;
@@ -92,10 +86,8 @@
       outline:none;
       font-size:15px;
     }
-    input[disabled]{
-      opacity:.9;
-      background: rgba(0,0,0,.14);
-    }
+    input[disabled]{opacity:.9; background: rgba(0,0,0,.14);}
+
     .pill{
       display:inline-flex; gap:6px; align-items:baseline;
       justify-content:flex-end;
@@ -105,6 +97,7 @@
     .pos{color:var(--good)}
     .neg{color:var(--bad)}
     .unit{color:var(--muted); font-size:12px; font-weight:600}
+
     .split{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -119,6 +112,7 @@
     }
     .mini .k{color:var(--muted); font-size:12px}
     .mini .v{font-size:18px; font-weight:900; margin-top:4px}
+
     .btn{
       width:100%;
       margin-top:12px;
@@ -139,11 +133,23 @@
     }
     .toggle label{font-size:14px}
     .toggle input{transform: scale(1.1)}
+
     details{margin-top:10px}
     summary{cursor:pointer; color:var(--muted); font-size:13px}
     .foot{color:var(--muted); font-size:12px; margin-top:12px; line-height:1.5}
+
+    .result{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      font-weight:800;
+      font-variant-numeric: tabular-nums;
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="topbar">
@@ -186,6 +192,7 @@
         <div>
           <div class="label">平日加班天數（C）</div>
           <div class="hint">2H × 1.33 + 0.8H × 1.67</div>
+        </div>
         <input id="C" type="number" inputmode="numeric" min="0" value="0"/>
       </div>
       <div class="row">
@@ -228,10 +235,10 @@
             <div class="k">1.67 倍時數（J）</div>
             <div id="J" class="v">0</div>
           </div>
-          <div class="mini">
-            <div class="k">2.67 倍時數（K）</div>
-            <div id="K" class="v">0</div>
-          </div>
+        </div>
+        <div class="mini" style="margin-top:10px">
+          <div class="k">2.67 倍時數（K）</div>
+          <div id="K" class="v">0</div>
         </div>
       </details>
     </div>
@@ -303,61 +310,94 @@
         <div id="T" class="v">0</div>
       </div>
 
+      <!-- 你如果不想按計算鈕，也可以留著當「手動刷新」 -->
       <button class="btn" id="calcBtn">計算薪資</button>
 
+      <button id="resetBtn" class="btn">一鍵清空重新計算</button>
+      <button id="shareBtn" class="btn">分享本次計算結果</button>
+
       <div class="foot">
-        註：加班倍率與每一天小時數先照你手稿（平日 2h、假日 8h/12h 分段倍率）做第一版。若你公司規則不同，我們下一步就把倍率/小時改成可調。
+        註：加班倍率/小時數先照你目前規則（平日 2h+0.8h；假日 8h/12h 分段倍率）做。
       </div>
-      <div style="margin-top:16px; text-align:center;">
-  <button id="resetBtn" class="btn">
-     一鍵清空重新計算
-  </button>
-        
-  <button id="shareBtn" class="btn">
-    分享本次計算結果
-  </button>
-  <!-- 勉勵金計算 -->
-<div class="card motivate-card">
-  <h3>勉勵金計算</h3>
+    </div>
 
-  <label>勉勵金基準額</label>
-  <input id="motivateBase" type="number" value="5000" />
+    <!-- 勉勵金 -->
+    <div class="card motivate-card">
+      <div class="sec-title"><span class="bar"></span>勉勵金計算</div>
 
-  <label>每月天數（V）</label>
-  <input id="motivateV" type="number" value="0" />
+      <div class="row">
+        <div>
+          <div class="label">勉勵金基準額</div>
+          <div class="hint">base</div>
+        </div>
+        <input id="motivateBase" type="number" inputmode="numeric" value="5000" />
+      </div>
 
-  <label>公司排休天數（W）</label>
-  <input id="motivateW" type="number" value="0" />
+      <div class="row">
+        <div>
+          <div class="label">每月天數（V）</div>
+          <div class="hint">例如 30 / 31</div>
+        </div>
+        <input id="motivateV" type="number" inputmode="numeric" value="0" />
+      </div>
 
-  <label>請假扣除額（N）</label>
-  <input id="motivateN" type="number" value="0" />
+      <div class="row">
+        <div>
+          <div class="label">公司排休天數（W）</div>
+          <div class="hint">例如 5</div>
+        </div>
+        <input id="motivateW" type="number" inputmode="numeric" value="0" />
+      </div>
 
-  <label>平日加班天數（U）</label>
-  <input id="motivateU" type="number" value="0" />
+      <div class="row">
+        <div>
+          <div class="label">請假扣除額（N）</div>
+          <div class="hint">例如 1500</div>
+        </div>
+        <input id="motivateN" type="number" inputmode="numeric" value="0" />
+      </div>
 
-  <div class="result">
-    勉勵金結餘（S）：<span id="motivateS">0</span>
-  </div>
-</div>
+      <div class="row">
+        <div>
+          <div class="label">平日加班天數（U）</div>
+          <div class="hint">例如 18</div>
+        </div>
+        <input id="motivateU" type="number" inputmode="numeric" value="0" />
+      </div>
+
+      <div class="result">
+        勉勵金結餘（S）：<span id="motivateS">0</span>
+      </div>
+      <div class="foot">
+        算式：days = V - W；perDay = (base - N) / days；S = floor(perDay × U)
       </div>
     </div>
   </div>
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const toNum = (v) => Number(v || 0);
+
+    function toNum(v){
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    }
 
     function fmt(n){
       const x = Math.round(n);
       return x.toLocaleString("zh-Hant");
     }
+
     function signFmt(n){
       const x = Math.round(n);
       const s = x >= 0 ? "+" : "-";
       return s + fmt(Math.abs(x));
     }
 
-    function calc(){
+    function cut2(n){
+      return (Math.floor(n * 100) / 100).toFixed(2);
+    }
+
+    function calcSalary(){
       const A = toNum($("A").value);
       const B = A / 240;
 
@@ -371,26 +411,20 @@
       const Q = toNum($("Q").value);
       const R = toNum($("R").value);
 
-      // 加班金額（依你的新規則）
-// 平日加班：每次固定 2H×1.33 + 0.8H×1.67
-const D = C * (B * 1.33 * 2 + B * 1.67 * 0.8);
+      // 依你規則：金額 = 時薪B ×（倍率×小時）×天數
+      const D = C * (B * 1.33 * 2 + B * 1.67 * 0.8);
+      const F = E * (B * 1.33 * 2 + B * 1.67 * 6);
+      const H = G * (B * 1.33 * 2 + B * 1.67 * 6 + B * 2.67 * 2.8);
 
- // 假日加班 8H：2H×1.33 + 6H×1.67
-const F = E * (B * 1.33 * 2 + B * 1.67 * 6);
-
-// 假日加班 12H：2H×1.33 + 6H×1.67 + 2.8H×2.67
- const H = G * (B * 1.33 * 2 + B * 1.67 * 6 + B * 2.67 * 2.8);
-
-// 加班時數明細（I/J/K）
-const I = (C * 2) + (E * 2) + (G * 2);         // 1.33 倍時數
-const J = (C * 0.8) + (E * 6) + (G * 6);       // 1.67 倍時數
-const K = (G * 2.8);                           // 2.67 倍時數
+      // 明細時數
+      const I = (C * 2) + (E * 2) + (G * 2);
+      const J = (C * 0.8) + (E * 6) + (G * 6);
+      const K = (G * 2.8);
 
       // 請假扣款
       const M = B * 8 * L;
       const P = B * 4 * O;
 
-      // 合計
       const addTotal = D + F + H + Q;
       const dedTotal = M + P + R;
 
@@ -403,12 +437,9 @@ const K = (G * 2.8);                           // 2.67 倍時數
       $("F").textContent = signFmt(F);
       $("H").textContent = signFmt(H);
 
-      const cut2 = n => Math.floor(n * 100) / 100;
-
-     $("I").textContent = cut2(I).toFixed(2);
-     $("J").textContent = cut2(J).toFixed(2);
-     $("K").textContent = cut2(K).toFixed(2);
-
+      $("I").textContent = cut2(I);
+      $("J").textContent = cut2(J);
+      $("K").textContent = cut2(K);
 
       $("M").textContent = "-" + fmt(M);
       $("P").textContent = "-" + fmt(P);
@@ -418,94 +449,78 @@ const K = (G * 2.8);                           // 2.67 倍時數
       $("T").textContent = fmt(T);
     }
 
-    // 即時更新
-    ["A","C","E","G","L","O","Q","R","includeBase"].forEach(id=>{
-      $(id).addEventListener("input", calc);
-      $(id).addEventListener("change", calc);
-    });
-    $("calcBtn").addEventListener("click", calc);
+    function calcMotivate(){
+      const base = toNum($("motivateBase").value);
+      const V = toNum($("motivateV").value);
+      const W = toNum($("motivateW").value);
+      const N = toNum($("motivateN").value);
+      const U = toNum($("motivateU").value);
 
-    // 初始計算
-    $("calcBtn").addEventListener("click", calc);
+      const days = V - W;
 
-// 🔽🔽🔽 就「貼在這裡」 🔽🔽🔽
+      let S = 0;
+      if (days > 0){
+        const perDay = (base - N) / days;
+        S = Math.floor(perDay * U); // 不要小數
+      }
 
-// 一鍵清空重新計算
-$("resetBtn")?.addEventListener("click", () => {
-  // 清空所有數字輸入
-  document.querySelectorAll('input[type="number"]').forEach(inp => {
-    inp.value = 0;
-  });
+      $("motivateS").textContent = fmt(S);
+    }
 
-  // 勾選預設 checkbox（如果有）
-  const includeA = document.querySelector('input[type="checkbox"]');
-  if (includeA) includeA.checked = true;
+    function bindAutoCalc(){
+      // 薪資：輸入即時計算
+      ["A","C","E","G","L","O","Q","R"].forEach(id=>{
+        $(id).addEventListener("input", calcSalary);
+      });
+      $("includeBase").addEventListener("change", calcSalary);
+      $("calcBtn").addEventListener("click", calcSalary);
 
-  // 清空顯示結果（安全寫法）
-  ["D","F","H","M","P","addTotal","dedTotal","T"].forEach(id => {
-    const el = $(id);
-    if (el) el.textContent = "";
-  });
+      // 勉勵金：輸入即時計算
+      ["motivateBase","motivateV","motivateW","motivateN","motivateU"].forEach(id=>{
+        $(id).addEventListener("input", calcMotivate);
+      });
 
-  // 重新計算一次
-  calc();
-});
-// 分享 / 截圖功能
-const shareBtn = $("shareBtn");
-if (shareBtn) {
-  shareBtn.addEventListener("click", async () => {
-   
-const now = new Date();
-const ym = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月`;
+      // 重置
+      $("resetBtn").addEventListener("click", () => {
+        // 只清可輸入的 number（不要動 disabled 的 B）
+        document.querySelectorAll('input[type="number"]:not([disabled])').forEach(inp => {
+          // 你想要 A 回到預設值的話，把下一行改成：inp.value = (inp.id==="A"?1000000:0);
+          inp.value = 0;
+        });
+        $("includeBase").checked = true;
+        calcSalary();
+        calcMotivate();
+      });
 
-const text =
+      // 分享
+      $("shareBtn").addEventListener("click", async () => {
+        const now = new Date();
+        const ym = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月`;
+
+        const text =
 `薪資計算結果（${ym}）
 ────────────
-加班收入：${$("addTotal")?.textContent || ""}
-請假扣款：${$("dedTotal")?.textContent || ""}
-本月總薪資：${$("T")?.textContent || ""}`;
+加班收入：${$("addTotal").textContent}
+請假扣款：${$("dedTotal").textContent}
+本月總薪資：${$("T").textContent}
 
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "薪資計算結果",
-          text
-        });
-      } catch (e) {}
-    } else {
-      navigator.clipboard.writeText(text);
-      alert("已複製結果，可貼到 LINE / 訊息");
+勉勵金結餘：${$("motivateS").textContent}`;
+
+        if (navigator.share) {
+          try { await navigator.share({ title: "薪資計算結果", text }); } catch(e){}
+        } else {
+          await navigator.clipboard.writeText(text);
+          alert("已複製結果，可貼到 LINE / 訊息");
+        }
+      });
     }
-  });
-    }
-    function calcMotivate() {
-  const V = toNum(document.getElementById("motivateV").value);
-  const W = toNum(document.getElementById("motivateW").value);
-  const N = toNum(document.getElementById("motivateN").value);
-  const U = toNum(document.getElementById("motivateU").value);
-  const base = toNum(document.getElementById("motivateBase").value);
 
-  const days = V - W;
-
-  let S = 0;
-  if (days > 0) {
-    const perDay = (base - N) / days;
-    S = Math.floor(perDay * U);
-  }
-
-  document.getElementById("motivateS").textContent = fmt(S);
-    }
-  }
-// 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
-// 自動監聽輸入，任何一格改變就重新計算
-["motivateBase","motivateV","motivateW","motivateN","motivateU"]
-  .forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener("input", calcMotivate);
-  });
-
-// 頁面載入先算一次
-calcMotivate();
+    // ✅ 頁面載入後先算一次（你問的「自動算一次」就是這個）
+    document.addEventListener("DOMContentLoaded", () => {
+      bindAutoCalc();
+      calcSalary();
+      calcMotivate();
+    });
   </script>
 </body>
 </html>
