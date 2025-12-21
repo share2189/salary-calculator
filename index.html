@@ -492,101 +492,69 @@
         calcMotivate();
       });
 
-      // 分享
-      $("shareBtn").addEventListener("click", async () => {
-  const now = new Date();
-  const ym = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月`;
+     const shareBtn = $("shareBtn");
 
-  // 讀取輸入值（原始）
-  const A = toNum($("A").value);
-  const B = toNum($("B").value);
-  const C = toNum($("C").value);
-  const E = toNum($("E").value);
-  const G = toNum($("G").value);
-  const L = toNum($("L").value);
-  const O = toNum($("O").value);
-  const Q = toNum($("Q").value);
-  const R = toNum($("R").value);
+if (shareBtn) {
+  shareBtn.addEventListener("click", async () => {
+    // 先確保最新結果（避免你沒按計算就分享）
+    try { calc(); } catch (e) {}
+    try { calcMotivate(); } catch (e) {}
 
-  // 讀取畫面已算好的結果（格式化後）
-  const D = $("D").textContent;
-  const F = $("F").textContent;
-  const H = $("H").textContent;
+    const now = new Date();
+    const ym = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月`;
 
-  const I = $("I").textContent;
-  const J = $("J").textContent;
-  const K = $("K").textContent;
-
-  const M = $("M").textContent;
-  const P = $("P").textContent;
-
-  const addTotal = $("addTotal").textContent;
-  const dedTotal = $("dedTotal").textContent;
-  const T = $("T").textContent;
-
-  // 勉勵金
-  const base = toNum($("motivateBase").value);
-  const V = toNum($("motivateV").value);
-  const W = toNum($("motivateW").value);
-  const N = toNum($("motivateN").value);
-  const U = toNum($("motivateU").value);
-  const S = $("motivateS").textContent;
-
-  const includeBase = $("includeBase").checked ? "包含底薪A" : "不包含底薪A";
-
-  const text =
+    // 這裡是你截圖那種「明細版」內容
+    const text =
 `薪資計算明細（${ym}）
 ────────────────
 【基本資料】
-底薪 A：${fmt(A)} 元
-時薪 B：${Number.isFinite(B) ? B.toFixed(2) : $("B").value} 元
-結算方式：${includeBase}
+底薪 A：${fmt(toNum($("A")?.value))} 元
+時薪 B：${$("B")?.value || ""}
 
 【加班】
-平日加班天數 C：${C} 天
-平日加班金額 D：${D} 元
+平日加班天數 C：${toNum($("C")?.value)} 天
+平日加班金額 D：${$("D")?.textContent || ""} 元
 
-假日加班8H天數 E：${E} 天
-假日加班金額 F：${F} 元
+假日加班8H天數 E：${toNum($("E")?.value)} 天
+假日加班金額 F：${$("F")?.textContent || ""} 元
 
-假日加班12H天數 G：${G} 天
-假日加班金額 H：${H} 元
+假日加班12H天數 G：${toNum($("G")?.value)} 天
+假日加班金額 H：${$("H")?.textContent || ""} 元
 
 【加班時數明細】
-1.33倍時數 I：${I} 小時
-1.67倍時數 J：${J} 小時
-2.67倍時數 K：${K} 小時
+1.33倍時數 I：${$("I")?.textContent || ""} 小時
+1.67倍時數 J：${$("J")?.textContent || ""} 小時
+2.67倍時數 K：${$("K")?.textContent || ""} 小時
 
 【請假扣款】
-全薪請假 L：${L} 天 → 扣款 M：${M} 元
-半薪請假 O：${O} 天 → 扣款 P：${P} 元
+全薪請假 L：${toNum($("L")?.value)} 天 → 扣款 M：${$("M")?.textContent || ""} 元
+半薪請假 O：${toNum($("O")?.value)} 天 → 扣款 P：${$("P")?.textContent || ""} 元
 
 【其他】
-其他加項 Q：${fmt(Q)} 元
-其他扣項 R：${fmt(R)} 元
+其他加項 Q：${fmt(toNum($("Q")?.value))} 元
+其他扣項 R：${fmt(toNum($("R")?.value))} 元
 
 【合計】
-加項合計：${addTotal} 元
-扣項合計：${dedTotal} 元
-實領薪資 T：${T} 元
+加項合計：${$("addTotal")?.textContent || ""} 元
+扣項合計：${$("dedTotal")?.textContent || ""} 元
+實領薪資 T：${$("T")?.textContent || ""} 元
 
 【勉勵金】
-基準額：${fmt(base)} 元
-每月天數 V：${V}
-排休天數 W：${W}
-請假扣除 N：${fmt(N)} 元
-平日加班天數 U：${U}
-勉勵金結餘 S：${S} 元`;
+勉勵金結餘 S：${$("motivateS")?.textContent || "0"} 元`;
 
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: "薪資計算明細", text });
-    } catch (e) {}
-  } else {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "薪資計算明細", text });
+        return;
+      } catch (e) {
+        // 使用者取消分享也會到這裡，繼續走複製即可
+      }
+    }
+
     await navigator.clipboard.writeText(text);
     alert("已複製明細，可貼到 LINE / 訊息");
-  }
-});
+  });
+  } 
     }
 
     // ✅ 頁面載入後先算一次（你問的「自動算一次」就是這個）
