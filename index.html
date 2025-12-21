@@ -479,21 +479,21 @@ const text =
   });
     }
     function calcMotivate() {
-  const V = toNum($("motivateV").value);
-  const W = toNum($("motivateW").value);
-  const N = toNum($("motivateN").value);
-  const U = toNum($("motivateU").value);
-  const base = toNum($("motivateBase").value);
+  const V = toNum(document.getElementById("motivateV").value);
+  const W = toNum(document.getElementById("motivateW").value);
+  const N = toNum(document.getElementById("motivateN").value);
+  const U = toNum(document.getElementById("motivateU").value);
+  const base = toNum(document.getElementById("motivateBase").value);
 
   const days = V - W;
 
   let S = 0;
   if (days > 0) {
-    const perDay = (base - N) / days;  // ✅ 這行才是你手寫的邏輯
-    S = Math.floor(perDay * U);        // ✅ 不要小數
+    const perDay = (base - N) / days;
+    S = Math.floor(perDay * U);
   }
 
-  $("motivateS").textContent = fmt(S);
+  document.getElementById("motivateS").textContent = fmt(S);
     }
   }
 // 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
