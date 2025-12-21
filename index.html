@@ -492,14 +492,20 @@ const text =
     const perDay = (base - N) / days;
     S = perDay * U;
   }
+$("#motivateS").text(fmt(Math.floor(S)));
 
-  $("motivateS").textContent = fmt(S);
 }
   }
 // 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
+// 自動監聽輸入，任何一格改變就重新計算
+["motivateBase","motivateV","motivateW","motivateN","motivateU"]
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", calcMotivate);
+  });
 
-// 初始化計算
-calc();
+// 頁面載入先算一次
+calcMotivate();
   </script>
 </body>
 </html>
