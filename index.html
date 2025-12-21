@@ -484,16 +484,20 @@ const text =
   const N = toNum($("motivateN").value); // 請假扣額
   const U = toNum($("motivateU").value); // 平日加班天數
   const base = toNum($("motivateBase").value);
-  
-  let S = 0;
   const days = V - W;
+  let S = 0;
 
   if (days > 0) {
     const perDay = (base - N) / days;
     S = perDay * U;
   }
 $("#motivateS").text(fmt(Math.floor(S)));
+ // 不要小數：直接無條件捨去（你要四捨五入就改 Math.round）
+  S = Math.floor(S);
 
+  const out = $("motivateS");
+  if (out) out.textContent = fmt(S);    // ✅ 用 textContent，不用 .text()
+    }
 }
   }
 // 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
