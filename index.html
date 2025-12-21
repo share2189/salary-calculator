@@ -316,28 +316,28 @@
   <button id="shareBtn" class="btn">
     分享本次計算結果
   </button>
-        <!-- 勉勵金計算 -->
+  <!-- 勉勵金計算 -->
 <div class="card motivate-card">
   <h3>勉勵金計算</h3>
+
   <label>勉勵金基準額</label>
-<input id="motivateBase" type="number" value="5000">
+  <input id="motivateBase" type="number" value="5000" />
 
-  <label>每月天數 (V)</label>
-  <input type="number" id="motivateV" value="0">
+  <label>每月天數（V）</label>
+  <input id="motivateV" type="number" value="0" />
 
-  <label>公司排休天數 (W)</label>
-  <input type="number" id="motivateW" value="0">
+  <label>公司排休天數（W）</label>
+  <input id="motivateW" type="number" value="0" />
 
-  <label>請假扣除額 (N)</label>
-  <input type="number" id="motivateN" value="0">
+  <label>請假扣除額（N）</label>
+  <input id="motivateN" type="number" value="0" />
 
-  <label>平日加班天數 (U)</label>
-  <input type="number" id="motivateU" value="0">
+  <label>平日加班天數（U）</label>
+  <input id="motivateU" type="number" value="0" />
 
   <div class="result">
-    勉勵金結餘 (S)：<span id="motivateS">0</span>
+    勉勵金結餘（S）：<span id="motivateS">0</span>
   </div>
-
 </div>
       </div>
     </div>
@@ -478,27 +478,23 @@ const text =
     }
   });
     }
-    function calcMotivate(){
-  const V = toNum($("motivateV").value); // 每月天數
-  const W = toNum($("motivateW").value); // 公司排休天數
-  const N = toNum($("motivateN").value); // 請假扣額
-  const U = toNum($("motivateU").value); // 平日加班天數
+    function calcMotivate() {
+  const V = toNum($("motivateV").value);
+  const W = toNum($("motivateW").value);
+  const N = toNum($("motivateN").value);
+  const U = toNum($("motivateU").value);
   const base = toNum($("motivateBase").value);
+
   const days = V - W;
+
   let S = 0;
-
   if (days > 0) {
-    const perDay = (base - N) / days;
-    S = perDay * U;
+    const perDay = (base - N) / days;  // ✅ 這行才是你手寫的邏輯
+    S = Math.floor(perDay * U);        // ✅ 不要小數
   }
-$("#motivateS").text(fmt(Math.floor(S)));
- // 不要小數：直接無條件捨去（你要四捨五入就改 Math.round）
-  S = Math.floor(S);
 
-  const out = $("motivateS");
-  if (out) out.textContent = fmt(S);    // ✅ 用 textContent，不用 .text()
+  $("motivateS").textContent = fmt(S);
     }
-}
   }
 // 🔼🔼🔼 貼到這裡結束 🔼🔼🔼
 // 自動監聽輸入，任何一格改變就重新計算
